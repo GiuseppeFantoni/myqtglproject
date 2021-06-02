@@ -140,6 +140,12 @@ void GLWidget::showFileOpenDialog() {
     }
 }
 
+
+void GLWidget::animate() {
+    updateGL();
+}
+
+
 void GLWidget::readOFFFile(const QString &fileName) {
     std::ifstream stream;
     stream.open(fileName.toUtf8(), std::ifstream::in);
@@ -441,6 +447,24 @@ void GLWidget::destroyVBOs() {
     }
 }
 
+void GLWidget::mouseMoveEvent(QMouseEvent * event) {
+    trackBall.mouseMove(event->posF());
+}
+
+void GLWidget::mousePressEvent(QMouseEvent * event) {
+    if (event->button() & Qt::LeftButton)
+        trackBall.mousePress(event->posF());
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent * event) {
+    if (event->button() == Qt::LeftButton)
+        trackBall.mouseRelease(event->posF());
+}
+
+void GLWidget::wheelEvent(QWheelEvent * event) {
+    zoom += 0.001 * event->delta();
+}
+
 void GLWidget::keyPressEvent(QKeyEvent * event) {
     switch (event->key()) {
     case Qt::Key_0:
@@ -467,26 +491,3 @@ void GLWidget::keyPressEvent(QKeyEvent * event) {
         qApp->quit();
     }
 }
-
-void GLWidget::mouseMoveEvent(QMouseEvent * event) {
-    trackBall.mouseMove(event->posF());
-}
-
-void GLWidget::mousePressEvent(QMouseEvent * event) {
-    if (event->button() & Qt::LeftButton)
-        trackBall.mousePress(event->posF());
-}
-
-void GLWidget::mouseReleaseEvent(QMouseEvent * event) {
-    if (event->button() == Qt::LeftButton)
-        trackBall.mouseRelease(event->posF());
-}
-
-void GLWidget::wheelEvent(QWheelEvent * event) {
-    zoom += 0.001 * event->delta();
-}
-
-void GLWidget::animate() {
-    updateGL();
-}
-
